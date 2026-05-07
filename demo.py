@@ -10,7 +10,7 @@ client = OpenAI(
     base_url="https://api.keywordsai.co/api/"
 )
 
-MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini/gemini-2.5-flash")
 
 def chat(user_message):
     """Send a message to the AI customer support bot through Keywords AI."""

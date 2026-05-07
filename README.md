@@ -1,61 +1,66 @@
-# AI Customer Support Bot - Keywords AI Demo
+# AI Customer Support Bot - Respan (Keywords AI) Demo
 
-A simple demo showcasing how to use Keywords AI (Respan) to monitor and observe OpenAI API calls in real-time.
+A small Python demo that routes chat completions through Respan so you can monitor requests, tokens, spend, latency, and errors from one dashboard.
 
-## What This Does
+## What This Demo Shows
 
-This demo builds a basic AI customer support bot that routes requests through Keywords AI instead of calling OpenAI directly. This allows you to:
+- Proxying model calls through Respan
+- Using a Gemini model via Respan's model mapping
+- Sending a custom `customer_identifier` for trace grouping
+- Viewing logs and observability metrics in real time
 
-- See all API calls in the Keywords AI dashboard
-- Monitor costs per call
-- Track response times
-- View full conversation logs
+## Prerequisites
+
+- A Respan account and project on [keywordsai.co](https://keywordsai.co)
+- A Gemini API key (for provider setup inside Respan)
 
 ## Setup
 
-### 1. Create a Keywords AI Account
-- Go to [keywordsai.co](https://keywordsai.co)
-- Create a free account
-- Create a new Project
-- Copy your **API Key** and **Organization ID**
+### 1. Configure Respan Dashboard
+
+1. Create a project in Respan.
+2. Add your Gemini provider key in `Settings -> Providers`.
+3. Add a model in `Platform -> Models`.
+4. Use the exact model ID from that list (example: `gemini/gemini-2.5-flash`).
 
 ### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Configure Environment Variables
-Update the `.env` file with your actual Keys:
-```
-KEYWORDSAI_API_KEY=your-actual-keywords-ai-key
-OPENAI_API_KEY=your-actual-openai-key
-ORG_ID=your-actual-org-id
+
+Create/update `.env`:
+
+```env
+KEYWORDSAI_API_KEY=your-respan-api-key
+MODEL_NAME=gemini/gemini-2.5-flash
+ORG_ID=your-org-id
 ```
 
-### 4. Run the Demo
+Notes:
+- `MODEL_NAME` must exactly match the model ID from your Respan Models page.
+- `ORG_ID` is optional for this script but useful for reporting/sharing.
+
+### 4. Run
+
 ```bash
 python demo.py
 ```
 
-Each call will be logged in your Keywords AI dashboard in real-time.
+## Expected Output
 
-## How It Works
+The script sends three customer-support style prompts and prints responses.
 
-This demo uses **Google Gemini API** to power the customer support bot:
+Each request appears in Respan logs with observability data such as:
+- Request count
+- Token usage
+- Spend
+- Error rate and latency
 
-```python
-import google.generativeai as genai
+## Files
 
-genai.configure(api_key="your-gemini-api-key")
-model = genai.GenerativeModel("gemini-pro")
-
-response = model.generate_content("Your question here...")
-```
-
-Simple, fast, and integrated with Keywords AI for observability.
-
-## Viewing Your Logs
-
-1. Run `python demo.py` multiple times
-2. Go to your Keywords AI dashboard
-3. See all calls, costs, and response times
+- `demo.py`: main runnable script
+- `requirements.txt`: Python dependencies
+- `.env`: local secrets and model config (ignored by git)
