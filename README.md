@@ -39,24 +39,20 @@ python demo.py
 
 Each call will be logged in your Keywords AI dashboard in real-time.
 
-## The Key Change
+## How It Works
 
-The main difference compared to normal OpenAI usage is:
+This demo uses **Google Gemini API** to power the customer support bot:
 
-**Normal OpenAI:**
 ```python
-client = OpenAI(api_key="your-openai-key")
+import google.generativeai as genai
+
+genai.configure(api_key="your-gemini-api-key")
+model = genai.GenerativeModel("gemini-pro")
+
+response = model.generate_content("Your question here...")
 ```
 
-**With Keywords AI:**
-```python
-client = OpenAI(
-    api_key="your-keywordsai-api-key",
-    base_url="https://api.keywordsai.co/api/"
-)
-```
-
-That's it! Everything else stays the same, but now you get full observability.
+Simple, fast, and integrated with Keywords AI for observability.
 
 ## Viewing Your Logs
 
