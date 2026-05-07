@@ -1,23 +1,40 @@
-import google.genai as genai
+from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-# Configure Gemini API
-client = genai.Client(api_key=os.getenv("OPENAI_API_KEY"))
+# Configure to use Keywords AI as proxy
+client = OpenAI(
+    api_key=os.getenv("KEYWORDSAI_API_KEY"),
+    base_url="https://api.keywordsai.co/api/"
+)
+
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
 
 def chat(user_message):
-    """Send a message to the AI customer support bot."""
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=f"You are a helpful customer support assistant. Please answer this question: {user_message}"
+    """Send a message to the AI customer support bot through Keywords AI."""
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a helpful customer support assistant."
+            },
+            {
+                "role": "user",
+                "content": user_message
+            }
+        ],
+        extra_body={
+            "customer_identifier": "demo-support-bot",
+        }
     )
-    return response.text
+    return response.choices[0].message.content
 
 # Test it
 if __name__ == "__main__":
-    print("Running AI Customer Support Bot Demo with Gemini...\n")
+    print("Running AI Customer Support Bot Demo with Keywords AI...\n")
     
     print("Q: What is your return policy?")
     print(f"A: {chat('What is your return policy?')}\n")
